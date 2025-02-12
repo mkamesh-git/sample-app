@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                 git branch: 'main', url: 'https://github.com/mkamesh-git/sample-app.git'
+                git branch: 'main', url: 'https://github.com/mkamesh-git/sample-app.git'
             }
         }
 
@@ -19,14 +19,10 @@ pipeline {
             }
         }
 
-       stage('Login to Docker Hub') {
-    steps {
-        withDockerRegistry([credentialsId: 'docker-hub-credentials', url: 'https://index.docker.io/v1/']) {
-            echo 'Logged into Docker Hub'
-        }
-    }
-}
-
+        stage('Login to Docker Hub') {
+            steps {
+                withDockerRegistry([credentialsId: DOCKER_CREDENTIALS, url: 'https://index.docker.io/v1/']) {
+                    echo 'Logged into Docker Hub'
                 }
             }
         }
@@ -47,4 +43,3 @@ pipeline {
         }
     }
 }
-
