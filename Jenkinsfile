@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = 'kamesh319/nginx'  // Your Docker Hub image name
+        IMAGE_NAME = 'kamesh319/nginx'  // Docker Hub image name
         DOCKER_CREDENTIALS = 'docker-hub-credentials'  // Jenkins credentials ID
     }
 
@@ -15,28 +15,25 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $IMAGE_NAME .'  // Build image with 'kamesh319/nginx'
+                sh 'docker build -t ${IMAGE_NAME} .'  // Build image
             }
         }
 
-        stage('Login to Docker Hub') {
+        stage('Login & Push to Docker Hub') {
             steps {
-                withDockerRegistry([credentialsId: DOCKER_CREDENTIALS, url: 'https://index.docker.io/v1/']) {
-                    echo 'Logged into Docker Hub'
+                script {
+                    withDockerRegistry([credentialsId: DOCKER_CREDENTIALS, url: 'https://index.docker.io/v1/']) {
+                        echo '✅ Logged into Docker Hub'
+                        sh 'docker push ${IMAGE_NAME}'  // Push image inside authentication block
+                    }
                 }
-            }
-        }
-
-        stage('Push Docker Image') {
-            steps {
-                sh 'docker push $IMAGE_NAME'  // Push image to Docker Hub
             }
         }
     }
 
     post {
         success {
-            echo "✅ Successfully pushed $IMAGE_NAME to Docker Hub!"
+            echo "✅ Successfully pushed ${IMAGE_NAME} to Docker Hub!"
         }
         failure {
             echo "❌ Build or Push failed! Check logs."
