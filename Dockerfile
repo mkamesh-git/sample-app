@@ -1,12 +1,11 @@
-e an official Nginx image as the base image
+# Use an official Nginx image as the base image
 FROM nginx:latest
 
-# Copy the static website files into the Nginx web directory
-COPY index.html /usr/share/nginx/html/
+# Copy static website files to Nginx default directory
+COPY . /usr/share/nginx/html
 
-# Expose port 80 to allow external access
+# Expose port 80
 EXPOSE 80
 
-# Start Nginx when the container starts
+# Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
-
