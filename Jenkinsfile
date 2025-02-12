@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git 'https://github.com/mkamesh-git/sample-app.git'
+                 git branch: 'main', url: 'https://github.com/mkamesh-git/sample-app.git'
             }
         }
 
